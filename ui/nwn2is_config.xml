@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8">
+
+<!--
+
+NWN2 Inventory Sorter 1.0.0
+Configuration Interface
+
+IDs:
+
+0	LB_CRITERIA
+1	LB_ORDER
+2	TXT_FIRST_X
+3	CB_CONTENTS
+4	CB_CONTAINERS_ONLY
+
+5	SB_FIRST_X
+
+10	BN_CLOSE
+11	BN_DEFAULTS
+
+20	LB_CRITERIA_SELECTED
+21	LB_ORDER_SELECTED
+
+-->
+
+<UIScene name="SCENE_NWN2IS_CONFIG" width="401" height="340" fadeout="0.3" fadein="0.3" draggable="true" backoutkey="true"
+	idleexpiretime="1.0" priority="SCENE_SCRIPT" scriptloadable="true" updaterate="0.1"
+	OnUpdate="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_refresh')"
+	OnBackout0="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','10','0')"
+	OnBackout1="UIButton_Input_ScreenClose()" />
+
+<UIPane x="0" y="34">
+	<UIPane x="10" y="0" width="384" height="298">
+		<UIPane x="0" y="8" height="30">
+			<UIPane x="10" y="1" width="362" height="28">
+				<UIText name="TXT_CHARACTER" x="8" y="0" width="346" multiline="1"
+					fontfamily="Default" style="1" align="center" valign="middle" text="Character Name" />
+
+				<UIFrame topleft="frame_g_tl.tga" topright="frame_g_tr.tga" bottomleft="frame_g_bl.tga" bottomright="frame_g_br.tga"
+					top="frame_g_t.tga" bottom="frame_g_b.tga" left="frame_g_l.tga" right="frame_g_r.tga"
+					fillstyle="stretch" fill="frame_g_bg.tga" border="8" alpha="0.6" />
+			</UIPane>
+		</UIPane>
+
+		<UIPane x="0" y="40" height="198">
+			<UIText x="10" y="0" height="24" fontfamily="Default" style="1" align="left" valign="middle" text="Available Criteria" />
+			<UIPane x="6" y="23" width="174" height="174">
+				<UIListbox name="LB_CRITERIA" yPadding="5" xPadding="5" showpartialchild="false" unequalcontrols="false" selectonleftclick="true">
+					<UIPane width="147" height="25" tupple="true" prototype="true"
+						OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','20','listboxrow:LB_CRITERIA')"
+						OnLeftDoubleClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','0','listboxtext:LB_CRITERIA.ROW_ID')">
+						<UIText name="ROW_ID" width="147" height="25" hidden="true" />
+						<UIText name="ROW_TEXT" width="147" height="25" x="8" fontfamily="Default" style="1" align="left" valign="middle" />
+						<UIButton width="147" height="25">
+							<UIFrame state="up" fill="b_g_lg01_normal.tga" />
+							<UIFrame state="down" fill="b_g_lg01_pressed.tga" />
+						</UIButton>
+					</UIPane>
+
+					<UIScrollBar style="STYLE_SB_THIN" />
+				</UIListbox>
+
+				<UIFrame topleft="frame_g_tl.tga" topright="frame_g_tr.tga" bottomleft="frame_g_bl.tga" bottomright="frame_g_br.tga"
+					top="frame_g_t.tga" bottom="frame_g_b.tga" left="frame_g_l.tga" right="frame_g_r.tga"
+					fillstyle="stretch" fill="frame_g_bg.tga" border="8" />
+			</UIPane>
+
+			<UIButton x="183" y="64" width="15" height="40"
+				OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','0','listboxtext:LB_CRITERIA.ROW_ID')" >
+				<UIFrame state="up" fill="b_addr_normal.tga" />
+				<UIFrame state="down" fill="b_addr_pressed.tga" />
+				<UIFrame state="focused" fill="b_addr_normal.tga" />
+				<UIFrame state="hilited" fill="b_addr_normal.tga" />
+				<UIFrame state="hifocus" fill="b_addr_normal.tga" />
+				<UIFrame state="disabled" fill="b_addr_normal.tga" />
+			</UIButton>
+
+			<UIButton x="183" y="108" width="15" height="40"
+				OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','1','listboxtext:LB_ORDER.ROW_ID')" >
+				<UIFrame state="up" fill="b_addl_normal.tga" />
+				<UIFrame state="down" fill="b_addl_pressed.tga" />
+				<UIFrame state="focused" fill="b_addl_normal.tga" />
+				<UIFrame state="hilited" fill="b_addl_normal.tga" />
+				<UIFrame state="hifocus" fill="b_addl_normal.tga" />
+				<UIFrame state="disabled" fill="b_addl_normal.tga" />
+			</UIButton>
+
+			<UIText x="205" y="0" height="24" fontfamily="Default" style="1" align="left" valign="middle" text="Sort Order" />
+			<UIPane x="201" y="23" width="174" height="174">
+				<UIListbox name="LB_ORDER" yPadding="5" xPadding="5" showpartialchild="false" unequalcontrols="false" selectonleftclick="true">
+					<UIPane width="147" height="25" tupple="true" prototype="true"
+						OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','21','listboxrow:LB_ORDER')"
+						OnLeftDoubleClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','1','listboxtext:LB_ORDER.ROW_ID')">
+						<UIText name="ROW_ID" width="147" height="25" hidden="true" />
+						<UIText name="ROW_TEXT" width="147" height="25" x="8" fontfamily="Default" style="1" align="left" valign="middle" />
+						<UIButton width="147" height="25">
+							<UIFrame state="up" fill="b_g_lg01_normal.tga" />
+							<UIFrame state="down" fill="b_g_lg01_pressed.tga" />
+						</UIButton>
+					</UIPane>
+
+					<UIScrollBar style="STYLE_SB_THIN" />
+				</UIListbox>
+
+				<UIFrame topleft="frame_g_tl.tga" topright="frame_g_tr.tga" bottomleft="frame_g_bl.tga" bottomright="frame_g_br.tga"
+					top="frame_g_t.tga" bottom="frame_g_b.tga" left="frame_g_l.tga" right="frame_g_r.tga"
+					fillstyle="stretch" fill="frame_g_bg.tga" border="8" />
+			</UIPane>
+		</UIPane>
+
+		<UIPane x="2" y="239" width="182" height="56">
+			<UIPane x="ALIGN_CENTER" y="7" width="160" height="21">
+				<UIText x="0" y="0" width="79" height="21" fontfamily="Default" style="1" align="left" valign="middle" text="Skip the first" />
+
+				<UIPane x="80" y="0" width="36" height="21">
+					<UIText name="TXT_FIRST_X" fontfamily="Default" style="1" align="center" valign="middle" editable="true" selectable="true"
+						filter="numeric" maxlength="3" multiline="false" text="0"
+						OnReturn0="UIObject_Input_SetFocus('SCENE_NWN2IS_CONFIG')"
+						OnReturn1="UIObject_Misc_SetLocalVarString('local:2')"
+						OnReturn2="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','2','local:2')"
+						OnLostFocus0="UIObject_Misc_SetLocalVarString('local:2')"
+						OnLostFocus1="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','2','local:2')" />
+
+					<UIFrame topleft="frame_g_tl.tga" topright="frame_g_tr.tga" bottomleft="frame_g_bl.tga" bottomright="frame_g_br.tga"
+						top="frame_g_t.tga" bottom="frame_g_b.tga" left="frame_g_l.tga" right="frame_g_r.tga"
+						fillstyle="stretch" fill="frame_g_bg.tga" border="8" />
+				</UIPane>
+
+				<UIText x="124" y="0" width="35" height="21" fontfamily="Default" style="1" align="left" valign="middle" text="items" capturemouseclicks="false"/>
+			</UIPane>
+
+			<UIScrollBar name="SB_FIRST_X" style="STYLE_OPTION_SLIDER" x="ALIGN_CENTER" y="30" width="130" height="21" horizontal="true"
+				OnSliderPositionChange0="UIObject_Misc_SetLocalVarString('local:2')"
+				OnSliderPositionChange1="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','5','local:2')" />
+		</UIPane>
+
+		<UIPane x="197" y="239" width="182" height="56">
+			<UIPane x="7" y="7" height="21">
+				<UIButton name="CB_CONTENTS" width="20" height="20" style="SQUARE_CHECKBOX_BUTTON" update="true"
+					OnUpdate="UIButton_OnUpdate_SetCheckedIfLocalVarEquals('local:3','1')"
+					OnSelected="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','3','1')"
+					OnUnselected="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','3','0')" />
+				<UIText x="24" y="0" fontfamily="Default" style="1" align="left" valign="middle" text="Sort Container Contents" />
+			</UIPane>
+
+			<UIPane x="12" y="30" height="21">
+				<UIButton name="CB_CONTAINERS_ONLY" width="20" height="20" style="SQUARE_CHECKBOX_BUTTON" update="true"
+					OnUpdate0="UIObject_OnUpdate_DisableIfLocalVarEquals('local:3','0')"
+					OnUpdate1="UIButton_OnUpdate_SetCheckedIfLocalVarEquals('local:4','1')"
+					OnSelected="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','4','1')"
+					OnUnselected="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','4','0')" />
+				<UIText x="24" y="0" fontfamily="Default" style="1" align="left" valign="middle" text="Only Container Contents" />
+			</UIPane>
+		</UIPane>
+	</UIPane>
+</UIPane>
+
+<UIButton name="BN_DEFAULTS" x="344" y="8" width="22" height="22" MouseDownSFX="gui_m_down" MouseUpSFX="gui_button"
+	OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','11','0')"
+	OnToolTip="UIObject_Tooltip_DisplayTooltipString('Reset to Defaults','OBJECT_X','OBJECT_Y','SCREEN_TOOLTIP_2')" >
+	<UIFrame state="up" fill="inv_sort_normal.tga" />
+	<UIFrame state="down" fill="inv_sort_pressed.tga" />
+	<UIFrame state="focused" fill="inv_sort_hover.tga" />
+	<UIFrame state="hilited" fill="inv_sort_hover.tga" />
+	<UIFrame state="hifocus" fill="inv_sort_pressed.tga" />
+	<UIFrame state="disabled" fill="inv_sort_normal.tga" />
+</UIButton>
+
+<UIButton name="BN_CLOSE" x="367" y="7" width="25" height="25" style="STYLE_CLOSE_BUTTON"
+	OnLeftClick0="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config_update','10','0')"
+	OnLeftClick1="UIButton_Input_ScreenClose()" />
+
+<UIFrame topleft="frame1_tl.tga" topright="frame1_tr.tga" bottomleft="frame1_bl.tga" bottomright="frame1_BR.tga" top="frame1_t.tga" bottom="frame1_b.tga"
+	left="frame1_l.tga" right="frame1_r.tga" border="32" />
+
+<UIText x="15" y="7" height="25" fontfamily="Title_Font" style="2" align="left" valign="middle" text="Configure Sort" />
+<UIIcon x="9" y="7" width="385" height="32" img="title_small.tga" />
+
+<UIFrame x="9" y="8" width="385" height="324" fillstyle="stretch" fill="solid_black_fill.tga" alpha="0.3" />
+<UIFrame x="9" y="8" width="385" height="324" fillstyle="tile" fill="dark_rock_tile.tga" />

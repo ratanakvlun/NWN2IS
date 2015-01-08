@@ -1,0 +1,507 @@
+NWN2 Inventory Sorter 1.0.0
+By Ratanak Lun, Feb 2012
+
+Contents
+========
+
+I. Overview
+
+II. Installation
+II.a. Requirements
+II.b. Instructions
+
+III. Usage
+III.a. Important
+III.b. Sorting
+III.c. Configuration
+III.d. Criteria
+
+IV. Customization
+IV.a. Order Table
+IV.b. Scripting
+
+V. Technical Information
+V.a. Implementation
+V.b. Limitations
+
+
+I. Overview
+===========
+
+Neverwinter Nights 2 is a great game with many interesting features, but
+one thing it lacks is control over inventory sorting. As it stands, the sort
+ordering is predefined and although it offers ordering with some frequently
+used items occurring first, it is not suitable for all players.
+
+The NWN2 Inventory Sorter (NWN2IS) is an engine that attempts to address this
+issue by allowing players more control over sort ordering. It also features
+the ability to sort containers in the inventory such as magic bags.
+
+Through an in-game interface, players are given a choice of which criteria
+they would like to use to sort each of their characters' inventories. Each
+character is given their own personal settings.
+
+If the available criteria are not enough, with a little scripting knowledge,
+it is possible to add additional criteria. Customization by way of table
+editing is also available for those who would rather not do scripting.
+
+
+II. Installation
+================
+
+Requirements
+============
+NWN2IS was developed and tested with the English version of Neverwinter
+Nights 2 Platinum (which includes the Mask of the Betrayer and Storm of Zehir
+expansions). However, theoretically, it should work with any version of
+Neverwinter Nights 2 updated to the latest version.
+
+In terms of system requirements, they are the same as the requirements for
+Neverwinter Nights 2. If you can run NWN2, you should be able to run the
+NWN2IS.
+
+NWN2IS has not been tested with multiplayer.
+
+
+Instructions
+============
+Copy the contents of the zip file into one of your Neverwinter Nights 2
+‘override’ folders. It is highly recommended that you use the ‘override’
+folder in your user path (e.g. My Documents). Once copied to your 'override'
+folder, unless you have a custom inventory screen, you are ready to use the
+NWN2IS (see Usage).
+
+NWN2IS comes with a modified inventory screen file (inventoryscreen.xml)
+based on the one included with the original Neverwinter Nights 2 campaign.
+If you are using a mod or playing a module that has its own custom inventory
+screen, then you will have to make the following adjustments to get things
+working:
+
+
+1. Make sure the inventory screen file of your choice is the only one in your
+override folder.
+
+
+2. Open the inventory screen file in a text editor.
+
+
+3. Make the file available to scripting functions. You do this by adding the
+‘scriptloadable’ attribute to the UIScene element in the file. You will
+usually find the UIScene element near the top of the file. The other
+attributes should be left untouched. In this example, I've added the attribute
+at the end:
+
+<UIScene name="SCREEN_INVENTORY"
+OnAdd=UIScene_Misc_RequestInventoryUpdates("true") x=520 y=ALIGN_CENTER
+width=367 height=510 draggable="true" backoutkey="true” fadeout="0.3"
+fadein="0.3" idleexpiretime="1.0" priority="SCENE_INGAME"
+OnRemove0=UIScene_Misc_RequestInventoryUpdates("false")
+OnRemove1=UIScene_Misc_ClearNewItemList() scriptloadable="true" />
+
+
+4. Find the sort button. The location of the button depends on your inventory
+screen file. For the original campaign inventory screen file, you can find
+the appropriate button by doing a search for 'SORT_INVENTORY'. Searching for
+just 'sort' may also work with your custom screen file. If you can't find it,
+check with the author of the file.
+
+
+5. Once you find the button, you need to modify the 'OnLeftClick' and
+'OnRightClick' callbacks so that they call the NWN2IS scripts (see below). The
+following example uses the original campaign inventory screen file:
+
+
+Original Button
+---------------
+<UIButton name="SORT_INVENTORY" x="320" y="304" width=24 height=24
+MouseDownSFX="gui_m_down" MouseUpSFX="gui_button"
+OnLeftClick=UIButton_Input_SortInventory()
+
+
+Modified Button
+---------------
+<UIButton name="SORT_INVENTORY" x="320" y="304" width=24 height=24
+MouseDownSFX="gui_m_down" MouseUpSFX="gui_button"
+OnLeftClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_sort_start','local:101')"
+OnRightClick="UIObject_Misc_ExecuteServerScript('gui_nwn2is_config','local:100')"
+
+
+6. Save the inventory screen file and you are finished!
+
+
+III. Usage
+==========
+
+Important
+=========
+One thing you should know is that the engine works by taking items from you
+and giving it back to you in sorted order. If you save during the sorting
+process and the engine has your items, you will lose the items when you later
+load the save. Leaving an area during sorting can also cause you to lose your
+items.
+
+Since the engine takes your items, anything in the hotbar will be removed. You
+can prevent this by putting your hotbar items in the front of your inventory
+and configuring the sort to skip them (see Configuration). Alternatively, you
+can choose to only sort container contents.
+
+Something else that you should know is that using too many criteria (or
+sorting too many items) can cause choppy performance and/or freezing during
+the sort process. Once the sort is complete, performance should return to
+normal.
+
+
+Sorting
+=======
+To begin sorting with the NWN2IS, you just need to left click on the sort icon
+on your inventory screen. If you haven't configured sort parameters, the sort
+conducted will use the first available criteria (which is equivalent to the
+original sort by default).
+
+
+Configuration
+=============
+To configure sort parameters, right click on the sort icon on the inventory
+screen. This will launch the configuration interface. You can close the
+interface by right clicking the sort icon again, or by clicking the close
+button in the top right corner of the interface.
+
+The button next to the close button is the reset button. It resets the sort
+parameters to the defaults.
+
+The next thing on the interface is a field containing the selected character's
+name. Changes to the sort parameters will be specific to this character.
+
+The name field is followed by two lists: 'Available Criteria' and 'Sort Order'.
+You can move criteria between these two lists by left double-clicking on the
+criteria, or by selecting them and left clicking the directional buttons
+between the lists.
+
+The 'Available Criteria' list shows all sorting criteria that are available.
+
+The 'Sort Order' list is an ordered list of criteria that will be run on the
+inventory items. The criteria at the top is used first and the criteria
+at the bottom is used last.
+
+Below the lists are additional parameters. On the bottom left side, you can
+set the number of inventory items to skip when sorting.
+
+To the bottom right side, there are checkboxes labelled: 'Sort Container
+Contents', and 'Only Container Contents'.
+
+If 'Sort Container Contents' is checked, then the contents of containers in
+the inventory (i.e. magic bags) will also be sorted.
+
+If 'Only Container Contents' is checked, then only container contents will
+be sorted and not the contents of the inventory.
+
+
+Criteria
+========
+Some of the criteria that are available by default are as follows:
+
+Default - sorts using the original sorting order
+Custom - similar to default but uses a custom order (see Customization)
+Unidentified - sorts based on identified status
+Name
+Weight
+Value
+Weapons
+Armor
+Potions
+
+Each of these have two variants: ascending and descending. Ascending starts
+with the smallest/earliest value and continues towards the largest/latest.
+Descending is the opposite of ascending order. In cases where the criteria is
+boolean (e.g. Unidentified, Weapons, Armor, Potions, etc), true is considered
+the smaller value and is put in front, and false is put in the back.
+
+If there are criteria that you don't need, you can edit the criteria table
+(nwn2is_criteria.2da). Just set 0 under the 'Enabled' column for the criteria
+that you don't want to appear and reload your game.
+
+If you later decide you want some criteria again, set 1 under the 'Enabled'
+column. You'll have to reload your game and then use the reset button in the
+configuration interface before the criteria will appear.
+
+When choosing criteria, generally, a good sort order starts with the most
+unique values first (such as item names) and then it is followed by a criteria
+that further groups the items. For example:
+
+1. Name
+2. Unidentified
+
+This will sort the items by name and then group them by their identified
+status. Within the groups, they will maintain their ordering by name.
+
+Of course, you are not limited to this arrangement. For example, if you liked
+the original ordering and only want to make minor changes, you could do
+something like this:
+
+1. Default
+2. Weapons
+
+This will use the original ordering and then it will put all weapons in front.
+Everything after the weapons will be in the original ordering.
+
+
+IV. Customization
+=================
+
+There are 2 ways to customize the sort engine: modify the order table, or
+script new criteria.
+
+
+Order Table
+===========
+The simplest way to customize is to modify the order table. If you are
+only interested in base types, then this can give the best performance by
+reducing the number of criteria used in the sort order.
+
+Included with this package is a 2da file (nwn2is_custom_order.2da). This file
+can be opened with a text editor or spreadsheet software (recommended) and
+shouldn't be too hard to edit if you have modified tables before.
+
+Inside the file are columns seperated by whitespace. You can specify your own
+custom ordering by modifying the 'Sort_Order' column. In ascending order,
+item types with the lowest values in the 'Sort_Order' column will be in front.
+By default, the ordering is equivalent to the original sort ordering.
+
+The other columns should not be modified. They are a reference to help you
+decide on an order. Row numbers are directly connected to base type IDs, so
+you should never change what each row represents (e.g. Longswords should
+always be row 1). You can use spreadsheet software to reorder the rows to get
+a better idea of what the order will be like, but when you are finished, you
+should make sure that the rows are back in order.
+
+Rows with the name "****" are not used but are required to keep the rows in
+order so that the row numbers map to base type IDs. Do not remove these rows.
+
+When you are ready to use the table with the sort engine, reload your game and
+select the 'Custom' criteria when configuring sort parameters. As long as the
+module you are playing does not replace any of the standard item types,
+everything should work out.
+
+
+Scripting
+=========
+The scripting method of customization is a lot more flexible than just
+modifying a table since you get access to instanced item information such as
+identified status, item properties, and other dynamic values associated with
+inventory items.
+
+It is also possible to combine multiple criteria into one by putting all the
+desired comparisons into a single script. This could be used to create a
+criteria for each class with class specific items appearing first.
+
+You can even create your own 2da file and have your comparison scripts
+reference it. In fact, this is what the 'Custom' criteria does.
+
+To start, you should modify the criteria table (nwn2is_criteria.2da) by
+adding a new row for your criteria. Put your new criteria's name under the
+'Name' column and specify a script that will be used for comparisons under
+the 'Compare_Script' column. To make your criteria appear in-game, put a 1
+in the 'Enabled' column.
+
+Note: Make sure you leave a blank line at the end of the file or the last row
+will be ignored!
+
+Now you need to write your script. Each compare script is a conditional script
+that takes an object and two indexes as script parameters. The object
+parameter is an object whose local variables comprise the array where the
+items to be compared are referenced. The two index parameters are the indexes
+into the local variable array where the items to compare are stored.
+
+Once you have accessed the objects to be compared, then you need only write
+whatever comparisons you desire.
+
+When a script ends, it should return a negative value if the first item
+should come before the second item, return zero if the first and second items
+are on equal standing, or positive if the first item should come after the
+second.
+
+Take a look at some of the existing comparison scripts to get a feel for how
+they are written.
+
+Once you have written your compare script, compile it and put it somewhere in
+your override folder. You will now be able to select your criteria in the
+configuration interface. When sorting occurs, your compare script will be
+called as necessary by the sort engine.
+
+Note: You will need to reload your game and press the reset button in the
+configuration interface in order for your criteria to appear.
+
+
+V. Technical Information
+========================
+
+The scripting language for Neverwinter Nights 2 has many limitations which
+makes writing a custom sort engine a bit complicated. The major obstacles
+include a lack of inventory manipulation functions and also the limit on
+script operations for a single script execution.
+
+In order to deal with inventory manipulation, NWN2IS uses the only means of
+inventory access given by the scripting language. They are the functions
+'ActionTakeItem' and 'ActionGiveItem'. As given by the prefix, these are
+actions. As such, they are queued up like other actions and are subject to
+delays and cancellations. The sort engine tries its best to compensate for
+this behavior.
+
+In the game engine, if a running script reaches a certain number of
+operations, the script is terminated. It is a failsafe that prevents scripts
+from running excessively. This is a problem for sorting since a sort can
+easily reach the operations limit. The only way to work around this issue
+is to use multiple script executions. The sort engine does this by using
+script execution chains.
+
+
+Implementation
+==============
+There are 3 major systems that make up NWN2IS.
+
+1. The Interface
+2. The Sorting System
+3. The Inventory Sorter
+
+
+The Interface
+-------------
+The interface is fairly straightforward. There are 4 callbacks that are linked
+to the user interface:
+
+'gui_nwn2is_config' is responsible for launching the configuration
+interface. It takes the open/close state of the configuration interface as
+a parameter which is then used to toggle the interface.
+
+'gui_nwn2is_config_refresh' is used to check which character is currently
+selected so that the appropriate sort parameters are loaded.
+
+'gui_nwn2is_config_update' is called when sorting parameters on the
+configuration interface are modified. It takes the ID of the manipulated
+control and the new value for that control as parameters.
+
+'gui_nwn2is_sort_start' is called to start the sorting process. It launches
+the actual inventory sorter. It takes the sorting state as a parameter to
+prevent initiating multiple sorts.
+
+
+The Sorting System
+------------------
+As mentioned before, the script operations limit is a problem when trying
+to sort. The solution is to spread the sort across multiple script executions.
+This means the sorting algorithm will need to be partitioned into smaller
+work units that require fewer operations than the per script execution limit.
+
+Most sorting algorithms, by design, deal with partitions and are even able
+to process those partitions simultaneously. Unfortunately, the scripting
+engine isn't really optimized for multiple cpu cores and so that benefit
+is not so applicable. In the end, the sorting system uses chains of script
+executions instead of running scripts simultaneously. This means that mostly
+any sorting algorithm can be used as long as it can be serialized.
+
+The algorithm chosen is a bottom up variant of merge sort because it is
+relatively simple to implement, has decent performance, and is also a stable
+sort (meaning we can sort multiple times with different criteria while
+preserving some of the existing ordering).
+
+The sort system is generalized in such a way that allows merge methods and
+comparisons to be substituted by simply specifying alternative scripts when
+passing sort parameters to the system. This makes it easy to add comparison
+criteria with minimal script modifiation.
+
+
+The Inventory Sorter
+--------------------
+The inventory sorter ties everything together. It is represented by an object
+created by the interface system and is used to run the sort process.
+
+In terms of program flow, it is similar to the sorting system. Just like the
+sorting system, it uses chains of executions to avoid the limit on script
+operations.
+
+The inventory sorter can be summarized by the follow steps:
+
+
+1. Initialization
+
+Information about the selected inventory (such as what items are present) is
+read and stored in a data object.
+
+
+2. Sort
+
+The data object containing information about the inventory is used to sort
+the inventory items in memory. The actual inventory is untouched.
+
+For one sort criteria at a time, a new sort instance is launched using the
+sorting system and the inventory sorter stops its own script execution.
+When the sorting is complete, the sorting system will execute a call back
+to the inventory sorter and the inventory sorter will continue where it left
+off.
+
+The inventory sorter stays in this state until it has cycled through all of
+the sort criteria in the 'Sort Order' list. 
+
+
+3. Take
+
+This is when items are queued for removal from the actual inventory by using
+'ActionTakeItem' actions.
+
+
+4. Check
+
+The inventory sorter checks to make sure all the queued take actions are
+executed. Once this completes, the inventory sorter will have all the actual
+inventory items that it will process.
+
+
+5. Subsort
+
+If the 'Sort Container Contents' checkbox is checked, this is when the
+containers are sorted.
+
+For one non-empty container at a time, a child sorter is created to sort the
+container. When the child sorter is done, it will call back to the parent
+sorter and the parent sorter will create a child sorter for the next container.
+
+The inventory sorter stays in this state until it has cycled through all of
+the non-empty containers.
+
+
+6. Give
+
+The inventory sorter uses 'ActionGiveItem' to queue up give actions for each
+item based on the sorted order. The receiving inventory will effectively get
+the items in sorted order.
+
+
+7. End
+
+This is the inventory sorter's final step. Here, it makes sure all queued
+give actions have been executed.
+
+Once the give actions are done, the inventory sorter is no longer needed and
+destroys itself. If it is a child sorter, it calls back to the parent sorter
+so that the parent knows to continue.
+
+
+Limitations
+===========
+While NWN2IS is fairly robust, it is not without limitations.
+
+Such a limitation is the transfer of inventory items during sorting. It is
+vulnerable because the transfers involve moving the items from the inventory.
+Also, the items are transferred using actions which are prone to delays and
+cancellations. Any user input that causes the inventory sorter to be
+interrupted will likely cause the loss of items. Such a situation would be a
+character transitioning to another area during a sort, or if a quick save is
+made during the sort process and the save game is later loaded.
+
+Another limitation is performance. The NWN2IS has quite a bit of overhead due
+to the neccessity of chained script executions and sort comparisons can be
+expensive. It is especially noticeable when too many criteria are in the sort
+order, or if there are lots of items to be sorted (i.e. multiple full
+containers). Choppiness and freezing can occur in these cases. It seems to
+be due to the sorting process exceeding the number of operations that are
+normally allowed for a given time period.

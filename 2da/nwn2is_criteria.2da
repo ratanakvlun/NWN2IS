@@ -1,0 +1,35 @@
+2DA V2.0
+
+                           Name              Compare_Script     Enabled
+  0            "Default (Asc)"      "nwn2is_cmp_default_a"           1
+  1           "Default (Desc)"      "nwn2is_cmp_default_d"           1
+  2             "Custom (Asc)"       "nwn2is_cmp_custom_a"           1
+  3            "Custom (Desc)"       "nwn2is_cmp_custom_d"           1
+  4      "Accessories (Front)"  "nwn2is_cmp_accessories_a"           1
+  5       "Accessories (Back)"  "nwn2is_cmp_accessories_d"           1
+  6            "Armor (Front)"        "nwn2is_cmp_armor_a"           1
+  7             "Armor (Back)"        "nwn2is_cmp_armor_d"           1
+  8          "Base Type (Asc)"    "nwn2is_cmp_base_type_a"           1
+  9         "Base Type (Desc)"    "nwn2is_cmp_base_type_d"           1
+ 10       "Containers (Front)"   "nwn2is_cmp_containers_a"           1
+ 11        "Containers (Back)"   "nwn2is_cmp_containers_d"           1
+ 12        "Heal Kits (Front)"    "nwn2is_cmp_heal_kits_a"           1
+ 13         "Heal Kits (Back)"    "nwn2is_cmp_heal_kits_d"           1
+ 14               "Name (Asc)"         "nwn2is_cmp_name_a"           1
+ 15              "Name (Desc)"         "nwn2is_cmp_name_d"           1
+ 16          "Potions (Front)"      "nwn2is_cmp_potions_a"           1
+ 17           "Potions (Back)"      "nwn2is_cmp_potions_d"           1
+ 18      "Projectiles (Front)"  "nwn2is_cmp_projectiles_a"           1
+ 19       "Projectiles (Back)"  "nwn2is_cmp_projectiles_d"           1
+ 20          "Scrolls (Front)"      "nwn2is_cmp_scrolls_a"           1
+ 21           "Scrolls (Back)"      "nwn2is_cmp_scrolls_d"           1
+ 22            "Traps (Front)"        "nwn2is_cmp_traps_a"           1
+ 23             "Traps (Back)"        "nwn2is_cmp_traps_d"           1
+ 24     "Unidentified (Front)" "nwn2is_cmp_unidentified_a"           1
+ 25      "Unidentified (Back)" "nwn2is_cmp_unidentified_d"           1
+ 26              "Value (Asc)"        "nwn2is_cmp_value_a"           1
+ 27             "Value (Desc)"        "nwn2is_cmp_value_d"           1
+ 28          "Weapons (Front)"      "nwn2is_cmp_weapons_a"           1
+ 29           "Weapons (Back)"      "nwn2is_cmp_weapons_d"           1
+ 30             "Weight (Asc)"       "nwn2is_cmp_weight_a"           1
+ 31            "Weight (Desc)"       "nwn2is_cmp_weight_d"           1
